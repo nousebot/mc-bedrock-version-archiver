@@ -1,0 +1,104 @@
+{
+    "Apps": [
+        {
+            "Name": "Minecraft Console",
+            "DataPath": "",
+            "ProductID": "9NBLGGH537BL",
+            "CataGoryID": "0e0dcbc6-1a24-42cf-847a-056d6d25f7ef",
+            "PackageFamilyName": "Microsoft.MinecraftUWPConsole_8wekyb3d8bbwe",
+            "FileExtension": [
+                "appx",
+                "eappx"
+            ],
+            "CheckWIF": false,
+            "CheckBetaVersion": false,
+            "CheckFromLocalFile": true,
+            "CalculateHash": true
+        },
+        {
+            "Name": "Minecraft for Windows",
+            "DataPath": "",
+            "ProductID": "9NBLGGH2JHXJ",
+            "CataGoryID": "d25480ca-36aa-46e6-b76b-39608d49558c",
+            "PackageFamilyName": "Microsoft.MinecraftUWP_8wekyb3d8bbwe",
+            "FileExtension": [
+                "appx"
+            ],
+            "CheckWIF": false,
+            "CheckBetaVersion": false,
+            "CheckFromLocalFile": true,
+            "CalculateHash": true
+        },
+        {
+            "Name": "Minecraft Preview for Windows",
+            "DataPath": "",
+            "ProductID": "9P5X4QVLC2XR",
+            "CataGoryID": "188f32fc-5eaa-45a8-9f78-7dde4322d131",
+            "PackageFamilyName": "Microsoft.MinecraftWindowsBeta_8wekyb3d8bbwe",
+            "FileExtension": [
+                "appx"
+            ],
+            "CheckWIF": false,
+            "CheckBetaVersion": false,
+            "CheckFromLocalFile": true,
+            "CalculateHash": true
+        },
+        {
+            "Name": "Minecraft Education",
+            "DataPath": "",
+            "ProductID": "9NBLGGH4R2R6",
+            "CataGoryID": "df31e196-d4c7-4a25-8e23-2788c261f328",
+            "PackageFamilyName": "Microsoft.MinecraftEducationEdition_8wekyb3d8bbwe",
+            "FileExtension": [
+                "appxbundle"
+            ],
+            "CheckWIF": false,
+            "CheckBetaVersion": false,
+            "CheckFromLocalFile": true,
+            "CalculateHash": true
+        },
+        {
+            "Name": "Minecraft Education Preview",
+            "DataPath": "",
+            "ProductID": "9PK8J8RZ7XQC",
+            "CataGoryID": "dd88a56c-c533-4e90-a64a-5c9b9db7e0bd",
+            "PackageFamilyName": "Microsoft.MinecraftEducationPreview_8wekyb3d8bbwe",
+            "FileExtension": [
+                "appxbundle"
+            ],
+            "CheckWIF": false,
+            "CheckBetaVersion": false,
+            "CheckFromLocalFile": true,
+            "CalculateHash": true
+        },
+        {
+            "Name": "Minecraft",
+            "DataPath": "",
+            "ProductID": "9MVXMVT8ZKWC",
+            "CataGoryID": "8c7a6ccd-246c-4955-aeb6-b32e64fd95fd",
+            "PackageFamilyName": "Microsoft.186805A1E9E_8wekyb3d8bbwe",
+            "FileExtension": [
+                "xvc"
+            ],
+            "CheckWIF": false,
+            "CheckBetaVersion": false,
+            "CheckFromLocalFile": true,
+            "CalculateHash": true
+        },
+        {
+            "Name": "Minecraft Preview",
+            "DataPath": "",
+            "ProductID": "9NQ19C36R0VD",
+            "CataGoryID": "4fbf0c64-2569-4095-8c34-6124ce6fade7",
+            "PackageFamilyName": "Microsoft.MinecraftBeta_8wekyb3d8bbwe",
+            "FileExtension": [
+                "xvc"
+            ],
+            "CheckWIF": false,
+            "CheckBetaVersion": false,
+            "CheckFromLocalFile": true,
+            "CalculateHash": true
+        }
+    ],
+    "DefaultDataPath": "D:\\Project\\ms-store-apps-version-saver\\data"
+}
