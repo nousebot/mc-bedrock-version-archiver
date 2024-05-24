@@ -46,7 +46,6 @@ jobs:
       - name: Update Token 🗝️
         id: token
         run: |
-          git remote add private https://${{ secrets.PAT }}@github.com/nousebot/mc-bedrock-metadata.git
           git add tokens.json
           git commit -am "Update token"
           git push
