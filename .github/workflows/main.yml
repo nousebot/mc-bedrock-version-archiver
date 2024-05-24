@@ -46,6 +46,7 @@ jobs:
       - name: Update Token 🗝️
         id: token
         run: |
+          git remote set-url origin https://${{ secrets.PAT }}@github.com/nousebot/mc-bedrock-version-archiver.git
           git add tokens.json
           git commit -am "Update token"
           git push
