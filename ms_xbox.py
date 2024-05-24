@@ -277,8 +277,8 @@ class Xbox:
             temp_data[version][type] = item
             if not version in archive:
                 if self.app_config["CalculateHash"]:
-                    data = requests.get(download_url[0])
-                    md5, sha256 = self.calculate_hashes(data)
+                    temp = requests.get(download_url[0])
+                    md5, sha256 = self.calculate_hashes(temp)
                     temp_data[version][type]["Hashes"]["MD5"] = md5
                     temp_data[version][type]["Hashes"]["SHA256"] = sha256
                 is_modify = True
