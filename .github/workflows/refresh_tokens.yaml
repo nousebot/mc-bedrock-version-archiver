@@ -1,0 +1,44 @@
+name: Refresh Tokens
+
+on:
+  workflow_dispatch:
+
+  schedule:
+    - cron: '0 0,12 * * *'
+
+jobs:
+  Check:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Dotnet 🏭
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Setup Python 🏭
+        uses: actions/setup-python@v5
+        with:
+          check-latest: true
+          python-version: '3.x'
+
+      - name: Install Python dependencies 📦
+        run: 
+          pip install requests packaging selenium python-dateutil
+
+      - name: Setup Chrome 🏭
+        run: |
+          Invoke-WebRequest -Uri "https://static.centbrowser.cn/win_stable/5.1.1130.82/centbrowser_5.1.1130.82_x64_portable.exe" -OutFile centbrowser.zip
+          7z x centbrowser.zip -obin\centbrowser
+          Remove-Item centbrowser.zip
+
+      - name: Update Token 🗝️
+        id: token
+        run: |
+          git config --global user.email ${{ secrets.EMAIL }}
+          git config --global user.name ${{ github.repository_owner }}
+          python3 refresh_tokens.py
+          git add tokens.json
+          git commit -am "Update token"
+          git push
