@@ -10,3 +10,4 @@ temp/
 error.log
 aria2.py
 gp.py
+test*

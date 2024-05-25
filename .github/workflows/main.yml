@@ -43,6 +43,12 @@ jobs:
           git clone https://${{ secrets.PAT }}@github.com/nousebot/mc-bedrock-metadata.git data
           python3 main.py
 
+      - name: Upload Error Logs
+        uses: actions/upload-artifact@v4
+        with:
+          name: error log
+          path: error.log
+
       - name: Update Token 🗝️
         id: token
         run: |
