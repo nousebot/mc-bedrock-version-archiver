@@ -78,12 +78,11 @@ for app in config["Apps"]:
     if app_is_xbox:
         xbox.setup_config(app)
         xbox.data_path = data_path
-        xbox.get_package_info()
-        # try:
-        #     xbox.get_package_info()
-        # except Exception as e:
-        #     error_output(e)
-        #     continue
+        try:
+            xbox.get_package_info()
+        except Exception as e:
+            error_output(e)
+            continue
     else:
         store.setup_config(app)
         store.data_path = data_path
