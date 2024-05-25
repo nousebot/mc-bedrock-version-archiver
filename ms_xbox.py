@@ -113,10 +113,10 @@ class Xbox:
         driver = webdriver.Chrome(service=service, options=option)
         driver.get(get_access_token_url)
         time.sleep(10)
-        driver.find_element("id", "i0116").send_keys("fuchuangguai623154@outlook.com")
+        driver.find_element("id", "i0116").send_keys(os.getenv("ACCOUNT"))
         driver.find_element("id", "idSIButton9").click()
         time.sleep(5)
-        driver.find_element("id", "i0118").send_keys("JimP2yB0XV")
+        driver.find_element("id", "i0118").send_keys(os.getenv("PASSWORD"))
         time.sleep(5)
         driver.find_element("id", "idSIButton9").click()
         count = 0

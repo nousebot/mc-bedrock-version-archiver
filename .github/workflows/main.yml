@@ -1,4 +1,4 @@
-name: version-archiver
+name: Version Archiver
 
 on:
   workflow_dispatch:
@@ -37,6 +37,9 @@ jobs:
 
       - name: Check Update 📡
         id: check
+        env:
+          ACCOUNT: ${{ secrets.ACCOUNT }}
+          PASSWORD: ${{ secrets.PASSWORD }}
         run: |
           git config --global user.email ${{ secrets.EMAIL }}
           git config --global user.name ${{ github.repository_owner }}
@@ -47,7 +50,7 @@ jobs:
         id: token
         run: |
           git add tokens.json
-          git commit -am "Update token"
+          git commit -am "Update tokens.json"
           git push
 
       - name: Push Data Change 🚀

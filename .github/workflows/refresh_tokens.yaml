@@ -7,7 +7,7 @@ on:
     - cron: '0 0,12 * * *'
 
 jobs:
-  Check:
+  Update:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
@@ -35,10 +35,13 @@ jobs:
 
       - name: Update Token 🗝️
         id: token
+        env:
+          ACCOUNT: ${{ secrets.ACCOUNT }}
+          PASSWORD: ${{ secrets.PASSWORD }}
         run: |
           git config --global user.email ${{ secrets.EMAIL }}
           git config --global user.name ${{ github.repository_owner }}
           python3 refresh_tokens.py
           git add tokens.json
-          git commit -am "Update token"
+          git commit -am "Update tokens.json"
           git push

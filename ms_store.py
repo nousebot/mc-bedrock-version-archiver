@@ -16,7 +16,6 @@ from selenium.webdriver.chrome.service import Service
 from xml.dom import minidom
 from requests import Session
 from datetime import datetime, timedelta, timezone
-from dateutil.parser import parse
 
 class Store:
     path = os.path.dirname(os.path.abspath(__file__))
@@ -124,12 +123,12 @@ class Store:
         driver = webdriver.Chrome(service=service, options=option)
         driver.get(login_url)
         time.sleep(10)
-        driver.find_element("id", "i0116").send_keys("fuchuangguai623154@outlook.com")
+        driver.find_element("id", "i0116").send_keys(os.getenv("ACCOUNT"))
         time.sleep(5)
         driver.find_element("id", "idSIButton9").click()
         while driver.find_element("id", "i0118") == None:
             time.sleep(1)
-        driver.find_element("id", "i0118").send_keys("JimP2yB0XV")
+        driver.find_element("id", "i0118").send_keys(os.getenv("PASSWORD"))
         time.sleep(5)
         try:
             driver.find_element("id", "idSIButton9").click()
