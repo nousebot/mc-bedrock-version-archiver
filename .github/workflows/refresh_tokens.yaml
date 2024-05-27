@@ -8,30 +8,13 @@ on:
 
 jobs:
   Update:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
-      - name: Setup Dotnet 🏭
-        uses: actions/setup-dotnet@v4
-        with:
-          dotnet-version: '8.0.x'
-
-      - name: Setup Python 🏭
-        uses: actions/setup-python@v5
-        with:
-          check-latest: true
-          python-version: '3.x'
-
       - name: Install Python dependencies 📦
         run: 
-          pip install requests packaging selenium python-dateutil
-
-      - name: Setup Chrome 🏭
-        run: |
-          Invoke-WebRequest -Uri "https://static.centbrowser.cn/win_stable/5.1.1130.82/centbrowser_5.1.1130.82_x64_portable.exe" -OutFile centbrowser.zip
-          7z x centbrowser.zip -obin\centbrowser
-          Remove-Item centbrowser.zip
+          pip install requests selenium python-dateutil
 
       - name: Update Token 🗝️
         id: token

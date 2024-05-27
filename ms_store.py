@@ -1,21 +1,14 @@
 import os
 import re
-import time
-import gzip
 import html
 import json
-import base64
 import hashlib
 import requests
-import datetime
-import subprocess
 import packaging.version
 
-from selenium import webdriver
-from selenium.webdriver.chrome.service import Service
+from datetime import datetime
 from xml.dom import minidom
 from requests import Session
-from datetime import datetime, timedelta, timezone
 
 class Store:
     path = os.path.dirname(os.path.abspath(__file__))
@@ -28,6 +21,7 @@ class Store:
     data_path = ""
     package_family_name = ""
     catagory_id = ""
+    user_token = ""
 
     release_type_map = {
         "Stable": "retail",
@@ -50,47 +44,6 @@ class Store:
         "arm": 4
     }
 
-    tokens_file = os.path.join(path, "tokens.json")
-    tokens = {}
-    if os.path.exists(tokens_file):
-        with open(tokens_file, "r") as f:
-            tokens = json.load(f)
-            f.close()
-    else:
-        cur_time = datetime.now(timezone(timedelta(hours=8))).strftime("%Y-%m-%dT%H:%M:%S.%fZ")
-        tokens = {
-            "Xbox": {
-                "AccessToken": {
-                    "Jwt": "",
-                    "LastUsed": cur_time,
-                    "Expires": cur_time
-                },
-                "UserToken": {
-                    "Jwt": "",
-                    "LastUsed": cur_time,
-                    "Expires": cur_time
-                },
-                "XToken": {
-                    "Jwt": "",
-                    "LastUsed": cur_time,
-                    "Expires": cur_time
-                },
-                "UserHashCode": 0
-            },
-            "Store": {
-                "AccessToken": {
-                    "Jwt": "",
-                    "LastUsed": cur_time,
-                    "Expires": cur_time
-                }
-            }
-        }
-        with open(tokens_file, "w") as f:
-            f.write(json.dumps(tokens, indent=4))
-            f.close()
-
-    user_token = tokens["Store"]["AccessToken"]["Jwt"]
-
     def setup_config(self, config):
         self.app_config = config
         self.catagory_id = config["CataGoryID"]
@@ -110,50 +63,6 @@ class Store:
             self.tokens = json.load(f)
             f.close()
         self.user_token = self.tokens["Store"]["AccessToken"]["Jwt"]
-
-    def get_token(self):
-        last_used_time = datetime.now(timezone(timedelta(hours=8)))
-        expires_time = datetime.fromtimestamp(last_used_time.timestamp() + 86400).astimezone(timezone(timedelta(hours=8)))
-        login_url = "https://login.live.com/ppsecure/InlineConnect.srf?id=80604&platform=android2.1.0510.1018&client_id=android-app://com.mojang.minecraftearth.H62DKCBHJP6WXXIV7RBFOGOL4NAK4E6Y"
-
-        service = Service(os.path.join(self.path, "bin", "chromedriver", "chromedriver.exe"))
-        option = webdriver.ChromeOptions()
-        option.add_argument("--headless")
-        option.binary_location = os.path.join(self.path, "bin", "centbrowser", "chrome.exe")
-        driver = webdriver.Chrome(service=service, options=option)
-        driver.get(login_url)
-        time.sleep(10)
-        driver.find_element("id", "i0116").send_keys(os.getenv("ACCOUNT"))
-        time.sleep(5)
-        driver.find_element("id", "idSIButton9").click()
-        while driver.find_element("id", "i0118") == None:
-            time.sleep(1)
-        driver.find_element("id", "i0118").send_keys(os.getenv("PASSWORD"))
-        time.sleep(5)
-        try:
-            driver.find_element("id", "idSIButton9").click()
-        except Exception as e:
-            pass
-        count = 0
-        while login_url == driver.current_url:
-            count += 1
-            time.sleep(1)
-            if count % 30 == 0:
-                driver.find_element("id", "idSIButton9").click()
-        cookies = driver.get_cookies()
-        driver.quit()
-        property = None
-        for item in cookies:
-            if item["name"] == "Property":
-                property = item["value"]
-                break
-        property = json.loads(property)
-        compress = gzip.compress(json.dumps(property).encode())
-        value = base64.b64encode(compress).decode("utf-8")
-        process = subprocess.Popen([os.path.join(self.path, "bin", "getmstoken", "GetMicrosoftToken.exe"), value], stdout=subprocess.PIPE)
-        process.wait()
-        token = process.stdout.read().replace(b"\r\n", b"")
-        return last_used_time, expires_time, token.decode("utf-8")
 
     def get_url(self, user, UpdateID, RevisionNumber, ReleaseType):
         with open(os.path.join(self.path, "xml", "FE3FileUrl.xml"), "r") as f:
@@ -189,19 +98,6 @@ class Store:
         release_type = self.release_type_map[check_type]
         if check_type == "Beta":
             self.update_token()
-            cur_time = datetime.now(timezone(timedelta(hours=8)))
-            if cur_time > datetime.strptime(self.tokens["Store"]["AccessToken"]["Expires"], "%Y-%m-%dT%H:%M:%S.%fZ").astimezone(timezone(timedelta(hours=8))):
-                last_used_time, expires_time, token = self.get_token()
-                self.user_token = token
-                self.tokens["Store"]["AccessToken"]["Jwt"] = token
-                self.tokens["Store"]["AccessToken"]["LastUsed"] = last_used_time.strftime("%Y-%m-%dT%H:%M:%S.%fZ")
-                self.tokens["Store"]["AccessToken"]["Expires"] = expires_time.strftime("%Y-%m-%dT%H:%M:%S.%fZ")
-            else:
-                self.user_token = self.tokens["Store"]["AccessToken"]["Jwt"]
-                self.tokens["Store"]["AccessToken"]["LastUsed"] = cur_time.strftime("%Y-%m-%dT%H:%M:%S.%fZ")
-            with open(self.tokens_file, "w") as f:
-                f.write(json.dumps(self.tokens, indent=4))
-                f.close()
         else:
             self.user_token = ""
         # set flag
