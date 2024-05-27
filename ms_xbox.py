@@ -66,11 +66,11 @@ class Xbox:
             version_id = args[1]
         archive = {}
         try:
-            with open(os.path.join(self.data_path, f"{self.package_family_name.split("_")[0]}.json"), "r") as f:
+            with open(os.path.join(self.data_path, f"{self.package_family_name.split('_')[0]}.json"), "r") as f:
                 archive = json.load(f)
                 f.close()
         except:
-            open(os.path.join(self.data_path, f"{self.package_family_name.split("_")[0]}.json"), "w").close()
+            open(os.path.join(self.data_path, f"{self.package_family_name.split('_')[0]}.json"), "w").close()
         is_modify = False
 
         self.update_token()
@@ -149,7 +149,7 @@ class Xbox:
             for version in archive:
                 archive[version] = dict(sorted(archive[version].items(), key=lambda x: self.sort_map[x[0]], reverse=False))
             archive = dict(sorted(archive.items(), key=lambda x: packaging.version.parse(x[0]), reverse=False))
-            with open(os.path.join(self.data_path, f"{self.package_family_name.split("_")[0]}.json"), "w") as f:
+            with open(os.path.join(self.data_path, f"{self.package_family_name.split('_')[0]}.json"), "w") as f:
                 f.write(json.dumps(archive, indent=4))
                 f.close()
         

@@ -106,11 +106,11 @@ class Store:
 
         archive = {}
         try:
-            with open(os.path.join(self.data_path, f"{self.package_family_name.split("_")[0]}.json"), "r") as f:
+            with open(os.path.join(self.data_path, f"{self.package_family_name.split('_')[0]}.json"), "r") as f:
                 archive = json.load(f)
                 f.close()
         except:
-            open(os.path.join(self.data_path, f"{self.package_family_name.split("_")[0]}.json"), "w").close()
+            open(os.path.join(self.data_path, f"{self.package_family_name.split('_')[0]}.json"), "w").close()
         
         with open(os.path.join(self.path, "xml", "GetCookie.xml"), "r") as f:
             cookie_content = f.read().format(self.user_token)
@@ -213,8 +213,9 @@ class Store:
                 archive[version] = {}
             for arch in packages[self.package_family_name.split("_")[0]][version]:
                 item = packages[self.package_family_name.split("_")[0]][version][arch]
+                file_name = item["FileName"]
                 url = self.get_url(self.user_token, item["UpdateID"], item["RevisionNumber"], release_type)
-                print(f"FileName: {item["FileName"]}\nURL: {url}\n")
+                print(f"FileName: {file_name}\nURL: {url}\n")
 
                 if arch not in archive[version]:
                     archive[version][arch] = {
@@ -242,6 +243,6 @@ class Store:
             archive[version] = dict(sorted(archive[version].items(), key=lambda x: self.arch_order[x[0]], reverse=False))
         archive = dict(sorted(archive.items(), key=lambda x: packaging.version.parse(x[0]), reverse=False))
         if is_modified:
-            with open(os.path.join(self.data_path, f"{self.package_family_name.split("_")[0]}.json"), "w") as f:
+            with open(os.path.join(self.data_path, f"{self.package_family_name.split('_')[0]}.json"), "w") as f:
                 f.write(json.dumps(archive, indent=4))
                 f.close()
