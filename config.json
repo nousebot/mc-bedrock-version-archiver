@@ -111,6 +111,7 @@
                 "apk",
                 "apks"
             ],
+            "CheckApkType": "full",
             "CheckBetaVersion": true,
             "CheckFromLocalFile": true,
             "CalculateHash": true
@@ -124,6 +125,7 @@
                 "apk",
                 "apks"
             ],
+            "CheckApkType": "full",
             "CheckBetaVersion": false,
             "CheckFromLocalFile": true,
             "CalculateHash": true
@@ -137,6 +139,7 @@
                 "apk",
                 "apks"
             ],
+            "CheckApkType": "full",
             "CheckBetaVersion": true,
             "CheckFromLocalFile": true,
             "CalculateHash": true
@@ -150,6 +153,7 @@
                 "apk",
                 "apks"
             ],
+            "CheckApkType": "full",
             "CheckBetaVersion": false,
             "CheckFromLocalFile": true,
             "CalculateHash": true

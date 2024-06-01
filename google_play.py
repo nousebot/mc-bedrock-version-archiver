@@ -2,10 +2,13 @@ import os
 import gzip
 import json
 import base64
+import hashlib
 import subprocess
 import packaging.version
 
 from datetime import datetime
+
+import requests
 
 class Play:
     path = os.path.dirname(os.path.abspath(__file__))
@@ -79,6 +82,14 @@ class Play:
         "config.zh": 47
     }
 
+    def calculate_hashes(self, data):
+        md5_hash = hashlib.md5()
+        sha256_hash = hashlib.sha256()
+        for chunk in data.iter_content(8192):
+            md5_hash.update(chunk)
+            sha256_hash.update(chunk)
+        return md5_hash.hexdigest(), sha256_hash.hexdigest()
+
     def setup_config(self, config, data_path=None):
         self.app_config = config
         self.data_path = config["DataPath"] if data_path is None else data_path
@@ -100,7 +111,7 @@ class Play:
         self.get_url_data["NeedSplitApk"] = split
         compress = gzip.compress(json.dumps(self.get_url_data).encode())
         value = base64.b64encode(compress).decode("utf-8")
-        process = subprocess.Popen([os.path.join(self.path, "bin", "gpappdetail", "GetGPAppDetail.exe"), "-m", "1", "-u", "beta.json", "-c", value], stdout=subprocess.PIPE)
+        process = subprocess.Popen([os.path.join(self.path, "bin", "gpappdetail", "GetGPAppDetail"), "-m", "1", "-u", "release.json", "-c", value], stdout=subprocess.PIPE)
         res = process.stdout.read().decode("utf-8")
         process.kill()
         decompress = gzip.decompress(base64.b64decode(res))
@@ -111,7 +122,7 @@ class Play:
         user_data_name = "beta.json" if beta else "release.json"
         compress = gzip.compress(json.dumps(self.get_detail_data).encode())
         value = base64.b64encode(compress).decode("utf-8")
-        process = subprocess.Popen([os.path.join(self.path, "bin", "gpappdetail", "GetGPAppDetail.exe"), "-m", "2", "-u", user_data_name, "-c", value], stdout=subprocess.PIPE)
+        process = subprocess.Popen([os.path.join(self.path, "bin", "gpappdetail", "GetGPAppDetail"), "-m", "2", "-u", user_data_name, "-c", value], stdout=subprocess.PIPE)
         res = process.stdout.read().decode("utf-8")
         decompress = gzip.decompress(base64.b64decode(res))
         data = decompress.decode('unicode_escape')
@@ -128,7 +139,9 @@ class Play:
 
         data = self.get_package_info(beta)
         if data["Success"]:
-            
+            if data["Data"]["VersionName"] in archive:
+                print(f"Latest version: {data['Data']['VersionName']}\n")
+                return 0
             # threads = []
             # threads.append(threading.Thread(target=self.get_url_info, args=(self, False)))
             # threads.append(threading.Thread(target=self.get_url_info, args=(self, True)))
@@ -141,7 +154,7 @@ class Play:
             #         if thread.is_alive():
             #             wait = True
             #             time.sleep(1)
-            self.updater(data, archive)
+            self.updater(data, archive, type=self.app_config["CheckApkType"])
             for version in archive:
                 archive[version] = dict(sorted(archive[version].items(), key=lambda x: self.arch_order[x[0]], reverse=False))
             archive = dict(sorted(archive.items(), key=lambda x: packaging.version.parse(x[0]), reverse=False))
@@ -201,6 +214,11 @@ class Play:
                             "SHA256": ""
                         }
                     }
+                if self.app_config["CalculateHash"]:
+                    temp = requests.get(download_url)
+                    md5, sha256 = self.calculate_hashes(temp)
+                    archive[version_name][key]["FullApkData"]["Hashes"]["MD5"] = md5
+                    archive[version_name][key]["FullApkData"]["Hashes"]["SHA256"] = sha256
             if not full_apk_info["Success"]:
                 if full_apk_info["Message"] != "Skip ckeck full apk":
                     self.error_output(Exception(full_apk_info["Message"]))
@@ -229,6 +247,11 @@ class Play:
                             "SHA256": ""
                         }
                     }
+                    if self.app_config["CalculateHash"]:
+                        temp = requests.get(download_url)
+                        md5, sha256 = self.calculate_hashes(temp)
+                        split_data[self.package_name]["Hashes"]["MD5"] = md5
+                        split_data[self.package_name]["Hashes"]["SHA256"] = sha256
                     for split_key in split_apk_info["Data"][f"{version_code}"]["SplitApkData"]:
                         file_name = f"{split_key}_{data['Data']['VersionCodeList'][key]}.apk"
                         file_size = split_apk_info["Data"][f"{version_code}"]["SplitApkData"][split_key]["Size"]
@@ -243,6 +266,11 @@ class Play:
                                 "SHA256": ""
                             }
                         }
+                        if self.app_config["CalculateHash"]:
+                            temp = requests.get(download_url)
+                            md5, sha256 = self.calculate_hashes(temp)
+                            split_data[split_key]["Hashes"]["MD5"] = md5
+                            split_data[split_key]["Hashes"]["SHA256"] = sha256
                     split_data = dict(sorted(split_data.items(), key=lambda x: self.split_apk_order[x[0]], reverse=False))
                     archive[version_name][key]["SplitApkData"] = split_data
             if not split_apk_info["Success"]:
