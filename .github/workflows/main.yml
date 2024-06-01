@@ -29,6 +29,7 @@ jobs:
 
       - name: Push Data Change 🚀
         id: push
+        continue-on-error: true
         run: |
           cd data
           git add .

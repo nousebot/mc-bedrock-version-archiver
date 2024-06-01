@@ -1,7 +1,5 @@
 .idea/
 .vscode/
-bin/centbrowser
-bin/aria2
 __pycache__/
 data/
 error.log
