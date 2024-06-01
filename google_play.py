@@ -139,21 +139,6 @@ class Play:
 
         data = self.get_package_info(beta)
         if data["Success"]:
-            if data["Data"]["VersionName"] in archive:
-                print(f"Latest version: {data['Data']['VersionName']}\n")
-                return 0
-            # threads = []
-            # threads.append(threading.Thread(target=self.get_url_info, args=(self, False)))
-            # threads.append(threading.Thread(target=self.get_url_info, args=(self, True)))
-            # for thread in threads:
-            #     thread.start()
-            # wait = True
-            # while wait:
-            #     wait = False
-            #     for thread in threads:
-            #         if thread.is_alive():
-            #             wait = True
-            #             time.sleep(1)
             self.updater(data, archive, type=self.app_config["CheckApkType"])
             for version in archive:
                 archive[version] = dict(sorted(archive[version].items(), key=lambda x: self.arch_order[x[0]], reverse=False))
@@ -174,7 +159,7 @@ class Play:
                 self.version_codes.append(data["Data"]["VersionCodeList"][key])
         else:
             for key in data["Data"]["VersionCodeList"]:
-                if data["Data"]["VersionCodeList"][key] not in archive[version_name]:
+                if key not in archive[version_name]:
                     self.version_codes.append(data["Data"]["VersionCodeList"][key])
         
         print(f"Latest version: {version_name}\n")
