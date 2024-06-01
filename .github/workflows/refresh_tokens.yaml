@@ -24,6 +24,7 @@ jobs:
         run: |
           git config --global user.email ${{ secrets.EMAIL }}
           git config --global user.name ${{ github.repository_owner }}
+          chmod +x bin/getmstoken/GetMicrosoftToken
           python3 refresh_tokens.py
           git add tokens.json
           git commit -am "Update tokens.json"
