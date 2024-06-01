@@ -1,0 +1,19 @@
+name: Test
+
+on:
+  workflow_dispatch:
+    
+jobs:
+  Check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check Update 📡
+        id: check
+        run: |
+          cd bin/gpappdetail/
+          chmod +x CultureSupport
+          ./CultureSupport
+
+
