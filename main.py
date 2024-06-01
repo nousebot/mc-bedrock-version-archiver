@@ -107,7 +107,7 @@ for app in config["Apps"]:
             continue
         if app["CheckBetaVersion"]:
             print("Checking Beta version...\n")
-            if play.checker(True) == 1:
+            if play.checker(beta=True) == 1:
                 continue
 
 print("All done!")

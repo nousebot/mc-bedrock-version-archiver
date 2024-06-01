@@ -124,6 +124,7 @@ class Play:
         value = base64.b64encode(compress).decode("utf-8")
         process = subprocess.Popen([os.path.join(self.path, "bin", "gpappdetail", "GetGPAppDetail"), "-m", "2", "-u", user_data_name, "-c", value], stdout=subprocess.PIPE)
         res = process.stdout.read().decode("utf-8")
+        process.kill()
         decompress = gzip.decompress(base64.b64decode(res))
         data = decompress.decode('unicode_escape')
         return json.loads(data)
@@ -152,9 +153,9 @@ class Play:
     def updater(self, data, archive, type="all"):
         url_data = ""
         version_name = data["Data"]["VersionName"]
+        self.version_codes.clear()
         if version_name not in archive:
             archive[version_name] = {}
-            self.version_codes.clear()
             for key in data["Data"]["VersionCodeList"]:
                 self.version_codes.append(data["Data"]["VersionCodeList"][key])
         else:
