@@ -2,12 +2,7 @@
 .vscode/
 bin/centbrowser
 bin/aria2
-bin/gpappdetail
 __pycache__/
 data/
-download/
-temp/
 error.log
-aria2.py
-gp.py
 test*

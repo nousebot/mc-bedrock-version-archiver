@@ -1,6 +1,7 @@
 {
     "Apps": [
         {
+            "Type": "Store",
             "Name": "Minecraft Console",
             "DataPath": "",
             "ProductID": "9NBLGGH537BL",
@@ -16,6 +17,7 @@
             "CalculateHash": true
         },
         {
+            "Type": "Store",
             "Name": "Minecraft for Windows",
             "DataPath": "",
             "ProductID": "9NBLGGH2JHXJ",
@@ -30,6 +32,7 @@
             "CalculateHash": true
         },
         {
+            "Type": "Store",
             "Name": "Minecraft Preview for Windows",
             "DataPath": "",
             "ProductID": "9P5X4QVLC2XR",
@@ -44,6 +47,7 @@
             "CalculateHash": true
         },
         {
+            "Type": "Store",
             "Name": "Minecraft Education",
             "DataPath": "",
             "ProductID": "9NBLGGH4R2R6",
@@ -58,6 +62,7 @@
             "CalculateHash": true
         },
         {
+            "Type": "Store",
             "Name": "Minecraft Education Preview",
             "DataPath": "",
             "ProductID": "9PK8J8RZ7XQC",
@@ -72,33 +77,83 @@
             "CalculateHash": true
         },
         {
+            "Type": "Xbox",
             "Name": "Minecraft",
             "DataPath": "",
             "ProductID": "9MVXMVT8ZKWC",
-            "CataGoryID": "8c7a6ccd-246c-4955-aeb6-b32e64fd95fd",
+            "ContentID": "8c7a6ccd-246c-4955-aeb6-b32e64fd95fd",
             "PackageFamilyName": "Microsoft.186805A1E9E_8wekyb3d8bbwe",
             "FileExtension": [
                 "xvc"
             ],
-            "CheckWIF": false,
+            "CheckFromLocalFile": true,
+            "CalculateHash": true
+        },
+        {
+            "Type": "Xbox",
+            "Name": "Minecraft Preview",
+            "DataPath": "",
+            "ProductID": "9NQ19C36R0VD",
+            "ContentID": "4fbf0c64-2569-4095-8c34-6124ce6fade7",
+            "PackageFamilyName": "Microsoft.MinecraftBeta_8wekyb3d8bbwe",
+            "FileExtension": [
+                "xvc"
+            ],
+            "CheckFromLocalFile": true,
+            "CalculateHash": true
+        },
+        {
+            "Type": "Play",
+            "Name": "Minecraft",
+            "DataPath": "",
+            "PackageName": "com.mojang.minecraftpe",
+            "FileExtension": [
+                "apk",
+                "apks"
+            ],
+            "CheckBetaVersion": true,
+            "CheckFromLocalFile": true,
+            "CalculateHash": true
+        },
+        {
+            "Type": "Play",
+            "Name": "Minecraft Trial",
+            "DataPath": "",
+            "PackageName": "com.mojang.minecrafttrialpe",
+            "FileExtension": [
+                "apk",
+                "apks"
+            ],
             "CheckBetaVersion": false,
             "CheckFromLocalFile": true,
             "CalculateHash": true
         },
         {
-            "Name": "Minecraft Preview",
+            "Type": "Play",
+            "Name": "Minecraft Education",
             "DataPath": "",
-            "ProductID": "9NQ19C36R0VD",
-            "CataGoryID": "4fbf0c64-2569-4095-8c34-6124ce6fade7",
-            "PackageFamilyName": "Microsoft.MinecraftBeta_8wekyb3d8bbwe",
+            "PackageName": "com.mojang.minecraftedu",
             "FileExtension": [
-                "xvc"
+                "apk",
+                "apks"
             ],
-            "CheckWIF": false,
+            "CheckBetaVersion": true,
+            "CheckFromLocalFile": true,
+            "CalculateHash": true
+        },
+        {
+            "Type": "Play",
+            "Name": "Minecraft Education Preview",
+            "DataPath": "",
+            "PackageName": "com.mojang.minecraftedu_preview",
+            "FileExtension": [
+                "apk",
+                "apks"
+            ],
             "CheckBetaVersion": false,
             "CheckFromLocalFile": true,
             "CalculateHash": true
         }
     ],
-    "DefaultDataPath": "D:\\a\\mc-bedrock-version-archiver\\mc-bedrock-version-archiver\\data"
+    "DefaultDataPath": ""
 }

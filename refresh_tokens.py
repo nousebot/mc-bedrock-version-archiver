@@ -18,7 +18,7 @@ class Store:
         expires_time = datetime.fromtimestamp(last_used_time.timestamp() + 86400).astimezone(timezone(timedelta(hours=8)))
         login_url = "https://login.live.com/ppsecure/InlineConnect.srf?id=80604&platform=android2.1.0510.1018&client_id=android-app://com.mojang.minecraftearth.H62DKCBHJP6WXXIV7RBFOGOL4NAK4E6Y"
 
-        service = Service(os.getenv("CHROMEWEBDRIVER"))
+        service = Service(os.path.join(os.getenv("CHROMEWEBDRIVER"), "chromedriver"))
         option = webdriver.ChromeOptions()
         option.add_argument("--headless")
         driver = webdriver.Chrome(service=service, options=option)
@@ -59,7 +59,7 @@ class Store:
 class Xbox:
     def get_access_token(path):
         get_access_token_url = "https://login.live.com/oauth20_authorize.srf?response_type=token&scope=service::user.auth.xboxlive.com::MBI_SSL&redirect_uri=https://login.live.com/oauth20_desktop.srf&client_id=00000000402b5328&display=touch&locale=en"
-        service = Service(os.getenv("CHROMEWEBDRIVER"))
+        service = Service(os.path.join(os.getenv("CHROMEWEBDRIVER"), "chromedriver"))
         option = webdriver.ChromeOptions()
         option.add_argument("--headless")
         driver = webdriver.Chrome(service=service, options=option)

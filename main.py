@@ -7,6 +7,7 @@ import datetime
 from typing import Any, OrderedDict
 from ms_store import Store
 from ms_xbox import Xbox
+from google_play import Play
 
 class Prop(OrderedDict):
     def __init__(self, props: str = ...) -> None:
@@ -29,6 +30,12 @@ logging.captureWarnings(True)
 path = os.path.dirname(os.path.abspath(__file__))
 parent_path = os.path.dirname(path)
 default_data_path = ""
+
+type_name_map = {
+    "Store": "Microsoft Store",
+    "Xbox": "Microsoft Store (Xbox)",
+    "Play": "Google Play"
+}
 
 def error_output(e):
     print(f"Error: {e}\n")
@@ -59,11 +66,9 @@ if os.path.dirname(config["DefaultDataPath"]) != os.path.join(path, "data"):
 print("Processing...")
 store = Store()
 xbox = Xbox()
+play = Play()
 
 for app in config["Apps"]:
-    app_is_xbox = False
-    if "xvc" in app["FileExtension"] or "msixvc" in app["FileExtension"]:
-        app_is_xbox = True
     data_path = ""
     if os.path.exists(app["DataPath"]):
         data_path = app["DataPath"]
@@ -73,17 +78,16 @@ for app in config["Apps"]:
         with open(os.path.join(path, "config.json"), "w") as f:
             f.write(json.dumps(config, indent=4))
             f.close()
-    print(f"Checking {app['Name']}...\n")
-    if app_is_xbox:
-        xbox.setup_config(app)
-        xbox.data_path = data_path
+    print(f"Checking {app['Name']} ({type_name_map[app['Type']]})...\n")
+    if app["Type"] == "Xbox":
+        xbox.setup_config(app, data_path = data_path)
         try:
             xbox.get_package_info()
         except Exception as e:
             error_output(e)
             continue
-    else:
-        store.setup_config(app)
+    elif app["Type"] == "Store":
+        store.setup_config(app, data_path = data_path)
         store.data_path = data_path
         print("Checking Stable version...\n")
         if store.checker("Stable") == 1:
@@ -95,6 +99,15 @@ for app in config["Apps"]:
         if app["CheckBetaVersion"]:
             print("Checking Beta version...\n")
             if store.checker("Beta") == 1:
+                continue
+    elif app["Type"] == "Play":
+        play.setup_config(app, data_path = data_path)
+        print("Checking Stable version...\n")
+        if play.checker() == 1:
+            continue
+        if app["CheckBetaVersion"]:
+            print("Checking Beta version...\n")
+            if play.checker(True) == 1:
                 continue
 
 print("All done!")

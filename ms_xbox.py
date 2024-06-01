@@ -31,9 +31,10 @@ class Xbox:
         "pc": "PC"
     }
 
-    def setup_config(self, config):
+    def setup_config(self, config, data_path=None):
         self.app_config = config
-        self.content_id = config["CataGoryID"]
+        self.data_path = config["DataPath"] if data_path is None else data_path
+        self.content_id = config["ContentID"]
         self.package_family_name = config["PackageFamilyName"]
 
     def error_output(self, e):

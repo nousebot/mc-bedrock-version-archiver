@@ -44,8 +44,9 @@ class Store:
         "arm": 4
     }
 
-    def setup_config(self, config):
+    def setup_config(self, config, data_path=None):
         self.app_config = config
+        self.data_path = config["DataPath"] if data_path is None else data_path
         self.catagory_id = config["CataGoryID"]
         self.package_family_name = config["PackageFamilyName"]
 
@@ -54,9 +55,6 @@ class Store:
         with open(os.path.join(self.path, "error.log"), "a+", encoding="utf-8") as f:
             f.write(f"[{datetime.now()}] Error: {e}\n")
             f.close()
-
-    def set_data_path(self, data_path: str) -> None:
-        data_path = data_path
 
     def update_token(self):
         with open(self.tokens_file, "r") as f:
