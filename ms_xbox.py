@@ -52,7 +52,7 @@ class Xbox:
         return md5_hash.hexdigest(), sha256_hash.hexdigest()
     
     def update_token(self):
-        with open(self.tokens_file, "r") as f:
+        with open(os.path.join(self.path, "tokens.json"), "r") as f:
             self.tokens = json.load(f)
             f.close()
         self.access_token = self.tokens["Xbox"]["AccessToken"]["Jwt"]
