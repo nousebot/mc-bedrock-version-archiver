@@ -130,7 +130,7 @@ class Xbox:
         expires_time = parse(xsts_json["NotAfter"]).astimezone(timezone(timedelta(hours=8)))
         return x_token, user_hashcode, last_used_time, expires_time
 
-def updater():
+def updater(path, tokens):
     access_token, last_used, expires = Xbox.get_access_token(path)
     tokens["Xbox"]["AccessToken"]["Jwt"] = access_token
     tokens["Xbox"]["AccessToken"]["LastUsed"] = last_used.strftime("%Y-%m-%dT%H:%M:%S.%fZ")
@@ -193,11 +193,12 @@ def __main__():
                 }
             }
         }
-    thread = threading.Thread(target=updater)
+    thread = threading.Thread(target=updater, args=(path, tokens))
     thread.start()
     thread.join(120)
     if thread.is_alive():
         thread._stop()
         print("Timeout")
 
-__main__()
+if __name__ == "__main__":
+    __main__()
