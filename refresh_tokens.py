@@ -1,11 +1,11 @@
 import os
-import threading
 import time
 import gzip
 import json
 import base64
 import requests
 import datetime
+import threading
 import subprocess
 
 from selenium import webdriver
@@ -130,43 +130,6 @@ class Xbox:
         expires_time = parse(xsts_json["NotAfter"]).astimezone(timezone(timedelta(hours=8)))
         return x_token, user_hashcode, last_used_time, expires_time
 
-path = os.path.dirname(os.path.abspath(__file__))
-tokens_file = os.path.join(path, "tokens.json")
-tokens = {}
-if os.path.exists(tokens_file):
-    with open(tokens_file, "r") as f:
-        tokens = json.load(f)
-        f.close()
-else:
-    cur_time = datetime.now(timezone(timedelta(hours=8))).strftime("%Y-%m-%dT%H:%M:%S.%fZ")
-    tokens = {
-        "Xbox": {
-            "AccessToken": {
-                "Jwt": "",
-                "LastUsed": cur_time,
-                "Expires": cur_time
-            },
-            "UserToken": {
-                "Jwt": "",
-                "LastUsed": cur_time,
-                "Expires": cur_time
-            },
-            "XToken": {
-                "Jwt": "",
-                "LastUsed": cur_time,
-                "Expires": cur_time
-            },
-            "UserHashCode": 0
-        },
-        "Store": {
-            "AccessToken": {
-                "Jwt": "",
-                "LastUsed": cur_time,
-                "Expires": cur_time
-            }
-        }
-    }
-
 def updater():
     access_token, last_used, expires = Xbox.get_access_token(path)
     tokens["Xbox"]["AccessToken"]["Jwt"] = access_token
@@ -194,9 +157,47 @@ def updater():
         f.close()
 
 def __main__():
+    path = os.path.dirname(os.path.abspath(__file__))
+    tokens_file = os.path.join(path, "tokens.json")
+    tokens = {}
+    if os.path.exists(tokens_file):
+        with open(tokens_file, "r") as f:
+            tokens = json.load(f)
+            f.close()
+    else:
+        cur_time = datetime.now(timezone(timedelta(hours=8))).strftime("%Y-%m-%dT%H:%M:%S.%fZ")
+        tokens = {
+            "Xbox": {
+                "AccessToken": {
+                    "Jwt": "",
+                    "LastUsed": cur_time,
+                    "Expires": cur_time
+                },
+                "UserToken": {
+                    "Jwt": "",
+                    "LastUsed": cur_time,
+                    "Expires": cur_time
+                },
+                "XToken": {
+                    "Jwt": "",
+                    "LastUsed": cur_time,
+                    "Expires": cur_time
+                },
+                "UserHashCode": 0
+            },
+            "Store": {
+                "AccessToken": {
+                    "Jwt": "",
+                    "LastUsed": cur_time,
+                    "Expires": cur_time
+                }
+            }
+        }
     thread = threading.Thread(target=updater)
     thread.start()
     thread.join(120)
     if thread.is_alive():
         thread._stop()
         print("Timeout")
+
+__main__()
