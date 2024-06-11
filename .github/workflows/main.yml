@@ -16,9 +16,10 @@ jobs:
 
       - name: Install Python dependencies 📦
         run: 
-          pip install requests packaging
+          pip install requests packaging logging
 
       - name: Check Update 📡
+        continue-on-error: true
         id: check
         run: |
           git config --global user.email ${{ secrets.EMAIL }}
@@ -38,6 +39,7 @@ jobs:
           git push
 
       - name: Upload Error Log 📤
+        if: failure()
         uses: actions/upload-artifact@v2
         with:
           name: error-log
