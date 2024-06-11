@@ -16,7 +16,7 @@ jobs:
 
       - name: Install Python dependencies 📦
         run: 
-          pip install requests packaging logging
+          pip install requests packaging
 
       - name: Check Update 📡
         continue-on-error: true
@@ -27,6 +27,16 @@ jobs:
           git clone https://${{ secrets.PAT }}@github.com/nousebot/mc-bedrock-metadata.git data
           chmod +x bin/gpappdetail/GetGPAppDetail
           python3 main.py
+          if [ -f error.log ]; then
+            echo "need-upload=true" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Upload Error Log 📤
+        if: steps.check.outputs.need-upload == 'true'
+        uses: actions/upload-artifact@v2
+        with:
+          name: error-log
+          path: error.log
 
       - name: Push Data Change 🚀
         id: push
@@ -38,9 +48,3 @@ jobs:
           git commit -am "Update"
           git push
 
-      - name: Upload Error Log 📤
-        if: failure()
-        uses: actions/upload-artifact@v2
-        with:
-          name: error-log
-          path: error.log
