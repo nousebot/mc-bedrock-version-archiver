@@ -39,10 +39,10 @@ type_name_map = {
 
 def error_output(e):
     print(f"Error: {e}\n")
-    text = logging.Formatter().formatException(e)
-    with open(os.path.join(path, "error.log"), "a+", encoding="utf-8") as f:
-        f.write(f"[{datetime.now()}] Error: {text}\n")
-        f.close()
+    logging.basicConfig(format='%(asctime)s - %(filename)s[line:%(lineno)d] - %(levelname)s: %(message)s',
+        level=logging.ERROR,
+        filename='test.log',
+        filemode='a')
 
 def calculate_hash(file_path, algorithm):
     hash_function = hashlib.new(algorithm)

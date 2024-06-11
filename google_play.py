@@ -100,10 +100,10 @@ class Play:
 
     def error_output(self, e):
         print(f"Error: {e}\n")
-        text = logging.Formatter().formatException(e)
-        with open(os.path.join(self.path, "error.log"), "a+", encoding="utf-8") as f:
-            f.write(f"[{datetime.now()}] Error: {text}\n")
-            f.close()
+        logging.basicConfig(format='%(asctime)s - %(filename)s[line:%(lineno)d] - %(levelname)s: %(message)s',
+            level=logging.ERROR,
+            filename='test.log',
+            filemode='a')
 
     def get_url_info(self, split=False):
         if split:
