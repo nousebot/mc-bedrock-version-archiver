@@ -36,3 +36,9 @@ jobs:
           git diff --exit-code
           git commit -am "Update"
           git push
+
+      - name: Upload Error Log 📤
+        uses: actions/upload-artifact@v2
+        with:
+          name: error-log
+          path: error.log

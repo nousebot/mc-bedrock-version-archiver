@@ -39,8 +39,9 @@ type_name_map = {
 
 def error_output(e):
     print(f"Error: {e}\n")
+    text = logging.Formatter().formatException(e)
     with open(os.path.join(path, "error.log"), "a+", encoding="utf-8") as f:
-        f.write(f"[{datetime.datetime.now()}] Error: {e}\n")
+        f.write(f"[{datetime.now()}] Error: {text}\n")
         f.close()
 
 def calculate_hash(file_path, algorithm):

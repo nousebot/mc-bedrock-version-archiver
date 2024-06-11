@@ -52,8 +52,9 @@ class Store:
 
     def error_output(self, e):
         print(f"Error: {e}\n")
+        text = logging.Formatter().formatException(e)
         with open(os.path.join(self.path, "error.log"), "a+", encoding="utf-8") as f:
-            f.write(f"[{datetime.now()}] Error: {e}\n")
+            f.write(f"[{datetime.now()}] Error: {text}\n")
             f.close()
 
     def update_token(self):
