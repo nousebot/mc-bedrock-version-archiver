@@ -105,7 +105,7 @@ class Play:
             filename='test.log',
             filemode='a')
 
-    def get_url_info(self, split=False):
+    def get_url_info(self, split=False, user_data_name="release"):
         if split:
             print("Checking split apk...\n")
         else:
@@ -113,7 +113,7 @@ class Play:
         self.get_url_data["NeedSplitApk"] = split
         compress = gzip.compress(json.dumps(self.get_url_data).encode())
         value = base64.b64encode(compress).decode("utf-8")
-        process = subprocess.Popen([os.path.join(self.path, "bin", "gpappdetail", "GetGPAppDetail"), "-m", "1", "-u", "release.json", "-c", value], stdout=subprocess.PIPE)
+        process = subprocess.Popen([os.path.join(self.path, "bin", "gpappdetail", "GetGPAppDetail"), "-m", "1", "-u", f"{user_data_name}.json", "-c", value], stdout=subprocess.PIPE)
         res = process.stdout.read().decode("utf-8")
         process.kill()
         decompress = gzip.decompress(base64.b64decode(res))
@@ -121,10 +121,10 @@ class Play:
         return json.loads(data)
     
     def get_package_info(self, beta=False):
-        user_data_name = "beta.json" if beta else "release.json"
+        user_data_name = "beta" if beta else "release"
         compress = gzip.compress(json.dumps(self.get_detail_data).encode())
         value = base64.b64encode(compress).decode("utf-8")
-        process = subprocess.Popen([os.path.join(self.path, "bin", "gpappdetail", "GetGPAppDetail"), "-m", "2", "-u", user_data_name, "-c", value], stdout=subprocess.PIPE)
+        process = subprocess.Popen([os.path.join(self.path, "bin", "gpappdetail", "GetGPAppDetail"), "-m", "2", "-u", f"{user_data_name}.json", "-c", value], stdout=subprocess.PIPE)
         res = process.stdout.read().decode("utf-8")
         process.kill()
         decompress = gzip.decompress(base64.b64decode(res))
@@ -169,8 +169,8 @@ class Play:
         if len(self.version_codes) == 0:
             return
         self.get_url_data["PackageIds"] = self.version_codes
-        full_apk_info = self.get_url_info(False) if type == "full" or type == "all" else {"Success": False, "Message": "Skip ckeck full apk", "Data": {}}
-        split_apk_info = self.get_url_info(True) if type == "split" or type == "all" else {"Success": False, "Message": "Skip ckeck split apk", "Data": {}}
+        full_apk_info = self.get_url_info(split=False, user_data_name=self.app_config["UserDataName"]) if type == "full" or type == "all" else {"Success": False, "Message": "Skip ckeck full apk", "Data": {}}
+        split_apk_info = self.get_url_info(split=True, user_data_name=self.app_config["UserDataName"]) if type == "split" or type == "all" else {"Success": False, "Message": "Skip ckeck split apk", "Data": {}}
         for key in data["Data"]["VersionCodeList"]:
             version_code = data["Data"]["VersionCodeList"][key]
             file_name = f"{self.package_name}_{data['Data']['VersionName']}_{data['Data']['VersionCodeList'][key]}.apk"
