@@ -129,6 +129,27 @@ class Xbox:
         last_used_time = parse(xsts_json["IssueInstant"]).astimezone(timezone(timedelta(hours=8)))
         expires_time = parse(xsts_json["NotAfter"]).astimezone(timezone(timedelta(hours=8)))
         return x_token, user_hashcode, last_used_time, expires_time
+    
+class Play:
+    def update_token(path):
+        config = {
+            "ConfigFiles": [
+                "release",
+                "beta",
+                "trial"
+            ]
+        }
+        compress = gzip.compress(json.dumps(config).encode())
+        value = base64.b64encode(compress).decode("utf-8")
+        process = subprocess.Popen([os.path.join(path, "bin", "gpappdetail", "GetGPAppDetail"), "-m", "3", "-c", value], stdout=subprocess.PIPE)
+        res = process.stdout.read().decode("utf-8")
+        process.kill()
+        decompress = gzip.decompress(base64.b64decode(res))
+        data = decompress.decode('unicode_escape')
+        loads = json.loads(data)
+        if loads["Success"] == False:
+            print(loads["Message"])
+            return
 
 def updater(path, tokens):
     access_token, last_used, expires = Xbox.get_access_token(path)
@@ -155,6 +176,8 @@ def updater(path, tokens):
     with open("tokens.json", "w") as f:
         f.write(json.dumps(tokens, indent=4))
         f.close()
+
+    Play.update_token(path)
 
 def __main__():
     path = os.path.dirname(os.path.abspath(__file__))
@@ -195,7 +218,7 @@ def __main__():
         }
     thread = threading.Thread(target=updater, args=(path, tokens))
     thread.start()
-    thread.join(120)
+    thread.join(150)
     if thread.is_alive():
         thread._stop()
         print("Timeout")
