@@ -29,5 +29,5 @@ jobs:
           python3 refresh_tokens.py
           git add tokens.json
           git add bin/gpappdetail/data -f
-          git commit -am "Update tokens.json"
+          git commit -am "Update tokens"
           git push
