@@ -1,4 +1,4 @@
-name: Version Archiver
+name: App Version Checker
 
 on:
   workflow_dispatch:
@@ -6,7 +6,7 @@ on:
   push:
   
   schedule:
-    - cron: '0,30 * * * *'
+    - cron: '0 * * * *'
 
 jobs:
   Check:
