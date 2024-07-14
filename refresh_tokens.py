@@ -55,7 +55,7 @@ class Store:
         process = subprocess.Popen([os.path.join(path, "bin", "getmstoken", "GetMicrosoftToken"), value], stdout=subprocess.PIPE)
         process.wait()
         token = process.stdout.read().replace(b"\r\n", b"")
-        return last_used_time, expires_time, token.decode("utf-8")
+        return last_used_time, expires_time, token.decode("utf-8").replace("\n", "")
 
 class Xbox:
     def get_access_token(path):
