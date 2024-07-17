@@ -217,11 +217,12 @@ def __main__():
             }
         }
     thread = threading.Thread(target=updater, args=(path, tokens))
+    thread.setDaemon(True)
     thread.start()
     thread.join(150)
     if thread.is_alive():
-        thread._stop()
         print("Timeout")
+        exit(1)
 
 if __name__ == "__main__":
     __main__()
