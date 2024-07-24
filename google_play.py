@@ -158,12 +158,14 @@ class Play:
         self.version_codes.clear()
         if version_name not in archive:
             archive[version_name] = {}
-            for key in data["Data"]["VersionCodeList"]:
+        for key in data["Data"]["VersionCodeList"]:
+            if key not in archive[version_name]:
                 self.version_codes.append(data["Data"]["VersionCodeList"][key])
-        else:
-            for key in data["Data"]["VersionCodeList"]:
-                if key not in archive[version_name]:
-                    self.version_codes.append(data["Data"]["VersionCodeList"][key])
+                archive[version_name][key] = {
+                    "VersionCode": data["Data"]["VersionCodeList"][key],
+                    "FullApkData": {},
+                    "SplitApkData": {}
+                }
         
         print(f"Latest version: {version_name}\n")
         if len(self.version_codes) == 0:
