@@ -178,6 +178,10 @@ class Play:
                 print("Full apk:")
                 file_size = full_apk_info["Data"][f"{version_code}"]["Size"]
                 download_url = full_apk_info["Data"][f"{version_code}"]["DownloadUrl"]
+                if download_url == None:
+                    if "Message" in full_apk_info["Data"][f"{version_code}"]:
+                        print(full_apk_info["Data"][f"{version_code}"]["Message"])
+                        continue
                 url_data += f"File Name: {file_name}\nFile Size: {file_size}\nDownload URL: {download_url}\n"
                 print(f"File Name: {file_name}\nFile Size: {file_size}\nDownload URL: {download_url}\n")
                 if key not in archive[version_name]:
