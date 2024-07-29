@@ -215,7 +215,7 @@ class Store:
                 item = packages[self.package_family_name.split("_")[0]][version][arch]
                 file_name = item["FileName"]
                 url = self.get_url(self.user_token, item["UpdateID"], item["RevisionNumber"], release_type)
-                print(f"FileName: {file_name}\nURL: {url}\n")
+                print(f"UpdateID: {item['UpdateID']}\nFileName: {file_name}\nURL: {url}\n")
 
                 if arch not in archive[version]:
                     archive[version][arch] = {

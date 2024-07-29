@@ -142,6 +142,7 @@ class Xbox:
                 download_url = temp_data[version][type]["DownloadURLs"]
                 print(f"Platform: {self.platform_map[type]}")
                 print(f"Version: {version}")
+                print(f"Version ID: {version_id}")
                 print(f"File Name: {file_name}")
                 print(f"File Size: {file_size}")
                 print(f"Download URL: ")
